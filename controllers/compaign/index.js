@@ -51,6 +51,11 @@ const createCampaign = async (req, res) => {
       story,
       tagline,
       zakatVerified,
+      instituteRole,
+      anticipatedDonations,
+      spendingPlans ,
+      firstName,
+      lastName
 
     } = req.body;
 
@@ -101,6 +106,11 @@ const createCampaign = async (req, res) => {
       story,
       tagline,
       zakatVerified,
+      instituteRole,
+      anticipatedDonations,
+      spendingPlans,
+      firstName,
+      lastName,
       createdBy: req.user.id
     });
 

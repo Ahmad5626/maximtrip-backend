@@ -4,7 +4,7 @@ const { createCampaign, getAllCampaigns, getLoginUserCampaigns } = require('../.
 const { authenticate } = require('../../middleware/auth-middleware');
 
 router.post("/create-campaign",authenticate,  createCampaign);
-router.get("/get-all-campaigns", authenticate, getAllCampaigns);
+router.get("/get-all-campaigns",  getAllCampaigns);
 router.get("/get-login-user-campaigns", authenticate, getLoginUserCampaigns);
 
 // router.get("/get-single-campaign/:id", authenticate, getSingleCampaign);

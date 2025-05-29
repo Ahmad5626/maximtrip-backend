@@ -35,7 +35,7 @@ const campaignSchema = new mongoose.Schema({
  fullNameAsPerAadhar: { type: String },
   fundType: { type: String },
  firstName: { type: String },
- goalAmount: { type: String },
+ goalAmount: { type: Number },
  governmentIdUrl: { type: String },
  ifscCode: { type: String },
  isBeneficiaryOrphan: { type: String },
@@ -56,6 +56,9 @@ const campaignSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true },
+    instituteRole: { type: String },
+    anticipatedDonations: { type: Number },
+    spendingPlans: { type: String },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Campaign', campaignSchema);

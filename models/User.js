@@ -1,20 +1,25 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  userName: String,
+  fullName: String,
   userEmail: String,
   password: String,
   RegisteredType: String,
-  Gender : String,
+  gender : String,
   dateOfBirth: String,
   State: String,
   Address: String,
   Pincode: String,
   maritalStatus: String,
   mobileNumber: String,
-  District: String,
+  district: String,
   PANCardNo: String,
- 
+ instituteName:String,
+  instituteBio:String,
+  instituteCategory:String,
+  Country:String,
+  websiteUrl:String,
+  profileImage:String,
   
 });
 

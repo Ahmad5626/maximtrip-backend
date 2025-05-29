@@ -4,12 +4,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const registerUser = async (req, res) => {
   try {
-    const { userName, userEmail, password, RegisteredType } = req.body;
-    if (!userName || !userEmail || !password ) {
+    const { fullName, userEmail, password, RegisteredType } = req.body;
+    if (!fullName || !userEmail || !password ) {
       return res.status(400).send("All fields are required");
     }
     const userExists = await User.findOne({
-      $or: [{ userEmail }, { userName }],
+      $or: [{ userEmail }, { fullName }],
     });
     if (userExists) {
       return res.status(400).send("User already exists");
@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
-      userName,
+      fullName,
       userEmail,
       password: hashedPassword,
       RegisteredType,
@@ -53,9 +53,16 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       {
         id: user._id,
-        userName: user.userName,
+        fullName: user.fullName,
         userEmail: user.userEmail,
         role: user.role,
+        RegisteredType: user.RegisteredType,
+        // Address: user.Address,
+        // instituteName: user.instituteName,
+        // instituteBio: user.instituteBio,
+        // instituteCategory: user.instituteCategory,
+        // profileImage: user.profileImage
+       
       },
       process.env.JWT_SECRET,
       {
@@ -65,12 +72,12 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User logged in successfully",
-
+      user,
       data: {
         token,
         user: {
           _id: user._id,
-          userName: user.userName,
+          fullName: user.fullName,
           userEmail: user.userEmail,
           role: user.role,
         },
@@ -78,23 +85,52 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {}
 };
+const logoutUser = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    await User.findByIdAndUpdate(id, { token: "" });
+    res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to log out user",
+      error: error.message,
+    });
+  }
+};
 
 const updateUser = async (req, res) => {
   const { id } = req.user;
-const { Gender, dateOfBirth, State, Address, Pincode, maritalStatus, mobileNumber, District, PANCardNo, } = req.body;
+const { gender, dateOfBirth, State, Address, Pincode, maritalStatus, mobileNumber, district, PANCardNo,instituteName,
+  instituteBio,
+  instituteCategory,
+  Country,
+  websiteUrl,
+profileImage } = req.body;
   try {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        Gender,
+        gender,
         dateOfBirth,
         State,
         Address,
         Pincode,
         maritalStatus,
         mobileNumber,
-        District,
+        district,
         PANCardNo,
+        instituteName,
+        instituteBio,
+        instituteCategory,
+        Country,
+        websiteUrl,
+        profileImage
       },
       { new: true ,runValidators: true}
     );
@@ -134,6 +170,25 @@ const getUsers = async (req, res) => {
   }
 };
 
+const chekcAuthData =async (req,res)=>{
+  try {
+    const {id}  = req.user;
+
+    
+  const data = await User.findOne({_id:id})
+  res.status(200).json({
+    success: true,
+    message: "Users fetched successfully",
+    data: data,
+  });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+      error: error.message,
+    })
+  }
+}
 
 const deleteUser=async(req,res)=>{
   const id=req.params.id
@@ -186,5 +241,6 @@ const deleteUser=async(req,res)=>{
 //     res.status(400).json({ message: "Google login failed" });
 //   }
 // };
-module.exports = { registerUser, loginUser,updateUser,getUsers,deleteUser };
+module.exports = { registerUser, loginUser,updateUser,getUsers,deleteUser,chekcAuthData };
+
 

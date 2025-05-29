@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { registerUser, loginUser, googleLogin, updateUser, getUsers, deleteUser } = require('../../controllers/auth-controller/index');
+const { registerUser, loginUser, googleLogin, updateUser, getUsers, deleteUser, chekcAuthData } = require('../../controllers/authController/index');
 const { authenticate } = require('../../middleware/auth-middleware');
 
 router.post('/register', registerUser)
@@ -11,15 +11,5 @@ router.get('/get-user-data', getUsers)
 router.delete('/delete-user/:id', deleteUser)
 // router.post("/google-login", googleLogin);
 
-router.get("/check-auth", authenticate, (req, res) => {
-  const user = req.user;
-
-  res.status(200).json({
-    success: true,
-    message: "Authenticated user!",
-    data: {
-      user,
-    },
-  });
-});   
+router.get("/check-auth", authenticate, chekcAuthData)   
 module.exports = router
