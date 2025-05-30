@@ -170,9 +170,54 @@ const getLoginUserCampaigns = async (req, res) => {
   }
 };
 
+const updateCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = { ...req.body, updatedAt: new Date() };
+    
+    const updatedCampaign = await Campaign.findByIdAndUpdate(
+      id, 
+      updateData,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Campaign updated successfully',
+      data: updatedCampaign,
+    });
+  } catch (error) {
+    console.error('Error updating campaign:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update campaign',
+      error: error.message,
+    });
+  }
+};
+const deleteCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedCampaign = await Campaign.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: 'Campaign deleted successfully',
+      data: deletedCampaign,
+    });
+  } catch (error) {
+    console.error('Error deleting campaign:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete campaign',
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createCampaign,
   getAllCampaigns,
   getLoginUserCampaigns,
+  updateCampaign,
+  deleteCampaign
 };

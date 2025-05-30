@@ -51,7 +51,11 @@ const campaignSchema = new mongoose.Schema({
  story: { type: String },
   tagline: { type: String },
  zakatVerified: { type: Boolean },
-  status: { type: String, default: 'Pending' },
+   status: {
+    type: String,
+    enum: ['Pending', 'Active', 'Reject', 'Terminate'],
+    default: 'Pending'
+  },
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
