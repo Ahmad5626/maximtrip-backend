@@ -4,10 +4,11 @@ const path = require("path");
 const app = express();
 const cors = require('cors');
 
-const allowedOrigins = [
-  process.env.CLIENT_URL?.replace(/\/$/, ""),
-  process.env.ADMIN_URL?.replace(/\/$/, "")
-];
+// const allowedOrigins = [
+//   process.env.CLIENT_URL?.replace(/\/$/, ""),
+//   process.env.ADMIN_URL?.replace(/\/$/, "")
+// ];
+const allowedOrigins =['https://giveummah.com', 'https://admin.giveummah.com']
 const port = process.env.PORT || 3000;
 app.use(cors({
   origin: function (origin, callback) {
