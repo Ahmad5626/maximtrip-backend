@@ -5,18 +5,19 @@ const app = express();
 const cors = require('cors');
 
 const allowedOrigins = [
-  process.env.CLIENT_URL, // e.g., http://localhost:3000
-  process.env.ADMIN_URL    // e.g., http://localhost:3001
+  process.env.CLIENT_URL?.replace(/\/$/, ""),
+  process.env.ADMIN_URL?.replace(/\/$/, "")
 ];
 const port = process.env.PORT || 3000;
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  console.log("Origin:", origin); // helpful log
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, true);
+  } else {
+    callback(new Error("Not allowed by CORS"));
+  }
+},
   
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
