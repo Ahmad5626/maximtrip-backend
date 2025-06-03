@@ -1,5 +1,7 @@
 const Campaign = require('../../models/Campaign');
-
+const Comments = require('../../models/Comments');
+const GivenAmount = require('../../models/GivenAmount');
+const mongoose = require("mongoose");
 // Create Campaign Controller
 const createCampaign = async (req, res) => {
  
@@ -55,7 +57,8 @@ const createCampaign = async (req, res) => {
       anticipatedDonations,
       spendingPlans ,
       firstName,
-      lastName
+      lastName,
+      ranking
 
     } = req.body;
 
@@ -111,6 +114,7 @@ const createCampaign = async (req, res) => {
       spendingPlans,
       firstName,
       lastName,
+      ranking,
       createdBy: req.user.id
     });
 
@@ -214,10 +218,118 @@ const deleteCampaign = async (req, res) => {
   }
 };
 
+const givenAmount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { headline, amount, subHeadline } = req.body;
+
+    // Create and save in GivenAmount collection
+    const newGivenAmount = new GivenAmount({ headline, amount, subHeadline });
+    await newGivenAmount.save();
+
+    // Embed the full data into Campaign
+    const campaign = await Campaign.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          givenAmount: {
+            _id: newGivenAmount._id,
+            headline,
+            amount,
+            subHeadline,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'GivenAmount added and embedded successfully',
+      data: campaign,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+const deleteGivenAmount = async (req, res) => {
+  try {
+    const { campaignId, givenAmountId } = req.params;
+
+    // ✅ Validate IDs
+    if (!mongoose.Types.ObjectId.isValid(givenAmountId)) {
+      return res.status(400).json({ error: 'Invalid givenAmountId' });
+    }
+
+    // ✅ Step 1: Delete the document from GivenAmount collection
+    await GivenAmount.findByIdAndDelete(givenAmountId);
+
+    // ✅ Step 2: Pull embedded document by _id
+    const campaign = await Campaign.findByIdAndUpdate(
+      campaignId,
+      {
+        $pull: {
+          givenAmount: { _id: new mongoose.Types.ObjectId(givenAmountId) }
+        }
+      },
+      { new: true }
+    );
+
+    if (!campaign) {
+      console.log("Params:", req.params);
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'GivenAmount deleted from both Campaign and GivenAmount collection',
+      data: campaign,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const createComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+    const commentData = new Comments({ comment });
+    await commentData.save();
+   
+
+    const campaign = await Campaign.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          comments: {
+            _id: commentData._id,
+            comment,
+           
+          },
+        },
+      },
+      { new: true }
+    )
+    await campaign.save();
+    res.status(200).json({
+      success: true,
+      message: 'Comment added successfully',
+      data: commentData,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 module.exports = {
   createCampaign,
   getAllCampaigns,
   getLoginUserCampaigns,
   updateCampaign,
-  deleteCampaign
+  deleteCampaign,
+  givenAmount,
+  deleteGivenAmount,
+  createComment
 };

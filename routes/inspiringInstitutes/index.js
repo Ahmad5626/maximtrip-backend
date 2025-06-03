@@ -5,7 +5,7 @@ const {createInspiringInstitutes, getAllInspiringInstitutes, updateInspiringInst
 
 router.post("/create-inspiring-institutes", createInspiringInstitutes);
 router.get("/get-inspiring-institutes", getAllInspiringInstitutes);
-router.put("/update-inspiring-institutes", updateInspiringInstitutes);
-router.delete("/delete-inspiring-institutes", deleteInspiringInstitutes);
+router.put("/update-inspiring-institutes/:id", updateInspiringInstitutes);
+router.delete("/delete-inspiring-institutes/:id", deleteInspiringInstitutes);
 
 module.exports = router

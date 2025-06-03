@@ -60,6 +60,23 @@ const campaignSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true },
+    givenAmount: [
+    {
+      _id: mongoose.Schema.Types.ObjectId,
+      amount: Number,
+      headline: String,
+      subHeadline: String,
+    },
+  ],
+    ranking: { type: Number },
+    comments: [
+      {
+        _id: mongoose.Schema.Types.ObjectId,
+        comment: String,
+        user:String,
+        date: Date,
+      },
+    ],
     instituteRole: { type: String },
     anticipatedDonations: { type: Number },
     spendingPlans: { type: String },
