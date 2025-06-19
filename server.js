@@ -4,15 +4,15 @@ const path = require("path");
 const app = express();
 const cors = require('cors');
 
-// const allowedOrigins = [
-//   process.env.CLIENT_URL?.replace(/\/$/, ""),
-//   process.env.ADMIN_URL?.replace(/\/$/, "")
-// ];
-const allowedOrigins =['https://giveummah.com', 'https://admin.giveummah.com']
+const allowedOrigins = [
+  process.env.CLIENT_URL?.replace(/\/$/, ""),
+  process.env.ADMIN_URL?.replace(/\/$/, "")
+];
+// const allowedOrigins =['https://giveummah.com', 'https://admin.giveummah.com']
 const port = process.env.PORT || 3000;
 app.use(cors({
   origin: function (origin, callback) {
-  console.log("Origin:", origin); // helpful log
+  // console.log("Origin:", origin); 
   if (!origin || allowedOrigins.includes(origin)) {
     callback(null, true);
   } else {
@@ -33,11 +33,7 @@ app.use(express.urlencoded({ extended: true  }));
 const connectDB = require('./config/db');
 const { connection } = require('mongoose');
 
-const authRoute = require('./routes/authRoutes');
-const campaignRoute = require('./routes/campaign');
-const buttonsRoute = require('./routes/buttons');
-const inspiringInstitutesRoute = require('./routes/inspiringInstitutes');
-const recommendedCausesRoute = require('./routes/recommendedCauses');
+
 connectDB();
 
 // Serve static images
@@ -47,12 +43,18 @@ const uploadRoutes = require("./routes/upload");
 app.use("/api", uploadRoutes);
 
 // route configration
-app.use("/auth", authRoute);
-app.use("/v1/api", campaignRoute);
-app.use("/v1/api/buttons", buttonsRoute);
-app.use("/v1/api/inspiringInstitutes", inspiringInstitutesRoute);
-app.use("/v1/api/recommendedCauses", recommendedCausesRoute);
-
+const HolidayPackageRoutes =require('./routes/HolidayPackeges')
+const CategoryRoutes =require('./routes/category')
+const EnquiryRoutes =require('./routes/Enquiry')
+const BlogRoutes =require('./routes/Blog')
+const DestinationRoutes =require('./routes/Destination')
+const PageRoutes =require('./routes/Page')
+app.use('/v1/api', HolidayPackageRoutes);
+app.use('/v1/api', CategoryRoutes);
+app.use('/v1/api', EnquiryRoutes );
+app.use('/v1/api', PageRoutes);
+app.use('/v1/api', BlogRoutes);
+app.use('/v1/api', DestinationRoutes);
 
 app.use((error,req,res,next)=>{
 console.log(error);
