@@ -40,75 +40,143 @@ const HolidayPackageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    bestPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    maxPrice: {
+      type: Number,
+      min: 0,
+    },
+    starting: {
+      type: String,
+      trim: true,
+    },
+    rating : {
+      type: String,
+      
+    },
+    cityRoute: {
       type: String,
       required: true,
       trim: true,
     },
+    featureImage: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+      trim: true,
+    },
+    featured: {
+      type: String,
+      enum: ["Yes", "No"],
+      default: "No",
+    },
+    showInSlider: {
+      type: String,
+      enum: ["Yes", "No"],
+      default: "No",
+    },
+    packageCategory: {
+      type: String,
+      required: true,
+    },
+    subCategory: {
+      type: String,
+      trim: true,
+    },
+    
+    // Rich text content fields
+    highlights: {
+      type: String,
+      default: "",
+    },
+    meals: {
+      type: String,
+      default: "",
+    },
+    transfer: {
+      type: String,
+      default: "",
+    },
+    hotel: {
+      type: String,
+      default: "",
+    },
+    sightseeing: {
+      type: String,
+      default: "",
+    },
+    shortDescription: {
+      type: String,
+      default: "",
+    },
+    slug: {
+      type: String,
+      unique: true,
+    },
+    longDescription: {
+      type: String,
+      default: "",
+    },
+    cancellationPolicies: {
+      type: String,
+      default: "",
+    },
+    
+    // Additional fields from the form
+    extraTitle: {
+      type: String,
+      trim: true,
+    },
+    extraFile: {
+      type: String,
+    },
+    metaDescription: {
+      type: String,
+      trim: true,
+    },
+    metaKeywords: {
+      type: String,
+      trim: true,
+    },
+    
+    // Legacy fields (keeping for backward compatibility)
+    address: {
+      type: String,
+      trim: true,
+    },
     overview: {
       type: String,
-      required: true,
     },
-    heroImage: {
-      type: String,
-      required: true,
-    },
-    multipleImages: {
-      type: [String],
-      default: [],
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    originalPrice: {
-      type: Number,
-      min: 0,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
+    
    
     itinerary: [ItineraryDaySchema],
     inclusions: [
       {
         type: String,
-        required: true,
       },
     ],
     exclusions: [
       {
         type: String,
-        required: true,
       },
     ],
     termsAndConditions: [
       {
         type: String,
-        required: true,
       },
     ],
-    highlights: [
+    highlights_array: [
       {
         type: String,
       },
     ],
   
-   
-    rating: {
-      average: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 5,
-      },
-      count: {
-        type: Number,
-        default: 0,
-      },
-    },
+  
     isActive: {
       type: Boolean,
       default: true,
@@ -127,8 +195,10 @@ const HolidayPackageSchema = new mongoose.Schema(
 )
 
 // Index for better search performance
-HolidayPackageSchema.index({ category: 1, isActive: 1 })
-HolidayPackageSchema.index({ price: 1 })
+HolidayPackageSchema.index({ packageCategory: 1, isActive: 1 })
+HolidayPackageSchema.index({ bestPrice: 1 })
 HolidayPackageSchema.index({ "rating.average": -1 })
+HolidayPackageSchema.index({ featured: 1 })
+HolidayPackageSchema.index({ showInSlider: 1 })
 
 module.exports = mongoose.model("HolidayPackage", HolidayPackageSchema)

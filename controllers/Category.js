@@ -1,9 +1,9 @@
 const Category = require("../models/Category");
 
 const createCategory = async (req, res) => {
-    const { categoryName,image,headline,story} = req.body;
+    const { categoryName,image,headline,metaKeywords,Slug,detail,subcategoryFAQ,metaDiscription,metaTitle,} = req.body;
     try {
-        const data = new Category({categoryName,image ,headline ,story});
+        const data = new Category({categoryName,image ,headline ,metaKeywords,Slug,detail,subcategoryFAQ,metaDiscription,metaTitle});
         res.status(200).json({
             success: true,
             message: "Category created successfully",
@@ -20,9 +20,9 @@ const createCategory = async (req, res) => {
 };
 const updateCategroy=async(req,res)=>{
     const {id}=req.params
-    const {categoryName,image,headline,story}=req.body
+    const {categoryName,image ,headline ,metaKeywords,Slug,detail,subcategoryFAQ,metaDiscription,metaTitle}=req.body
     try {
-        const data=await Category.findByIdAndUpdate(id,{categoryName,image,headline,story},{new:true})
+        const data=await Category.findByIdAndUpdate(id,{categoryName,image ,headline ,metaKeywords,Slug,detail,subcategoryFAQ,metaDiscription,metaTitle},{new:true})
         res.status(200).json({
             success:true,
             message:"Category updated successfully",
