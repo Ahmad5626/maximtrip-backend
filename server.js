@@ -3,6 +3,7 @@ const express = require('express');
 const path = require("path");
 const app = express();
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const allowedOrigins = [
   process.env.CLIENT_URL?.replace(/\/$/, ""),
@@ -61,6 +62,87 @@ console.log(error);
 res.status(500).send(error.message);
 
 })
+
+
+app.post('/contact/send-email', async (req, res) => {
+  const { from, name, phone, subject, message ,email} = req.body;
+
+  try {
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
+
+const mailOptions = {
+  from: `"${name}" <sales@maximtrip.com>`,
+  to: "sales@maximtrip.com",
+  replyTo: email,
+  subject: "New Contact Form Submission",
+  html: `
+    <h3>New Message from Contact Form</h3>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Phone:</strong> ${phone}</p>
+    <p><strong>Subject:</strong> ${subject}</p>
+    <p><strong>Message:</strong><br/>${message}</p>
+  `
+};
+
+    await transporter.sendMail(mailOptions);
+
+ res.status(200).json({ message: 'Message sent successfully!' });
+ 
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Email sending failed!' });
+  }
+});
+
+app.post('/enquiry/send-email', async (req, res) => {
+  const { from, fullName, mobile, distination, members ,email,packageName, date} = req.body;
+
+  try {
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
+
+const mailOptions = {
+  from: `"${fullName}" <sales@maximtrip.com>`,
+  to: "sales@maximtrip.com",
+  replyTo: email,
+  subject: "New Enquiry Form Submission",
+  html: `
+    <h3>New Message from Contact Form</h3>
+    <p><strong>Name:</strong> ${fullName}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Phone No:</strong> ${mobile}</p>
+    <p><strong>Distination:</strong> ${distination}</p>
+    <p><strong>Members:</strong><br/>${members}</p>
+    <p><strong>Package:</strong><br/>${packageName}</p>
+    <p><strong>Date:</strong><br/>${date}</p>
+  `
+};
+
+    await transporter.sendMail(mailOptions);
+
+ res.status(200).json({ message: 'Message sent successfully!' });
+ 
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Email sending failed!' });
+  }
+});
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
