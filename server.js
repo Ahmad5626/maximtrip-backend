@@ -84,12 +84,16 @@ const mailOptions = {
   replyTo: email,
   subject: "New Contact Form Submission",
   html: `
-    <h3>New Message from Contact Form</h3>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Phone:</strong> ${phone}</p>
-    <p><strong>Subject:</strong> ${subject}</p>
-    <p><strong>Message:</strong><br/>${message}</p>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+      <h2 style="color: #ce3c3d;">New Message from Contact Form</h2>
+      <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
+      <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
+      <p style="margin: 10px 0;"><strong>Phone:</strong> ${phone}</p>
+      <p style="margin: 10px 0;"><strong>Subject:</strong> ${subject}</p>
+      <p style="margin: 10px 0;"><strong>Message:</strong><br/>
+        <span style="white-space: pre-line;">${message}</span>
+      </p>
+    </div>
   `
 };
 
@@ -123,14 +127,17 @@ const mailOptions = {
   replyTo: email,
   subject: "New Enquiry Form Submission",
   html: `
-    <h3>New Message from Contact Form</h3>
-    <p><strong>Name:</strong> ${fullName}</p>
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Phone No:</strong> ${mobile}</p>
-    <p><strong>Distination:</strong> ${distination}</p>
-    <p><strong>Members:</strong><br/>${members}</p>
-    <p><strong>Package:</strong><br/>${packageName}</p>
-    <p><strong>Date:</strong><br/>${date}</p>
+  <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+  
+  <h3 style="color: #ce3c3d;">New Message from Contact Form</h3>
+  <p style="margin: 10px 0;"><strong>Name:</strong> ${fullName}</p>
+  <p style="margin: 10px 0;"><strong>Email:</strong> ${email}</p>
+  <p style="margin: 10px 0;"><strong>Phone No:</strong> ${mobile}</p>
+  <p style="margin: 10px 0;"><strong>Distination:</strong> ${distination}</p>
+  <p style="margin: 10px 0;"><strong>Members:</strong><br/>${members}</p>
+  <p style="margin: 10px 0;"><strong>Package:</strong><br/>${packageName}</p>
+  <p style="margin: 10px 0;"><strong>Date:</strong><br/>${date}</p>
+  </div>
   `
 };
 

@@ -165,11 +165,11 @@ const HolidayPackageSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    termsAndConditions: [
+    termsAndConditions: 
       {
         type: String,
       },
-    ],
+    
     highlights_array: [
       {
         type: String,
